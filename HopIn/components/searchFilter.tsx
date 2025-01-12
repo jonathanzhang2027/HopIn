@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, FlatList, TextInput, Button, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+
 import RidePostContainer from './RidePostContainer';
-import { db } from '../config/firebaseConfig';
-import { collection, onSnapshot, query } from 'firebase/firestore';
+import { auth, db } from '../config/firebaseConfig';
+import { collection, onSnapshot, query, doc, setDoc, addDoc } from 'firebase/firestore';
+import { onAuthStateChanged, User } from 'firebase/auth';
 
 interface RidePosting {
     id: string;
@@ -14,13 +16,16 @@ interface RidePosting {
     date: Date;
   }
   
-export default function SearchFilter() {
-    const [postings, setPostings] = useState<RidePosting[]>([]);
+
+export default function SearchFilter( { navigation }: { navigation: any }) {
+  const [postings, setPostings] = useState<RidePosting[]>([]);
+
   const [afterFilter, setAfterFilter] = useState<RidePosting[]>([]);
   const [from, setFrom] = useState<string>('');
   const [destination, setDestination] = useState<string>('');
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
+
 
   useEffect(() => {
     const q = query(collection(db, 'ridePostings'));
@@ -45,6 +50,23 @@ export default function SearchFilter() {
     // Cleanup function to unsubscribe from real-time updates when component unmounts
     return () => unsubscribe();
   }, []);
+    
+  const [user, setUser] = useState<User | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+          if (user) {
+             setUser(user);
+             setUserId(user.uid);
+          } else {
+            setUser(null);
+            setUserId(null);
+           }
+        });
+         return () => unsubscribe();
+    }, []);
+
 
   const handleChange = (event: any, selectedDate?: Date) => {
     setShowPicker(false); // Close the picker after selection
@@ -88,6 +110,16 @@ export default function SearchFilter() {
         );
     }
 
+  const createRide = async () => {
+    const docData = {
+      ride: 1,
+      driver_id: userId
+    }
+    const collectionRef = collection(db, 'rides');
+    const docRef = await addDoc(collectionRef, docData);
+  }
+
+
   return (
     <ScrollView>
         <View style={styles.container}>
@@ -116,6 +148,7 @@ export default function SearchFilter() {
 
         <Button title="Search" onPress={handleSubmit}/>
 
+
         <View style={styles.container}>
             <Text style={styles.title}> Postings</Text>
             <FlatList
@@ -124,6 +157,12 @@ export default function SearchFilter() {
             keyExtractor={(item) => item.id}
             />
         </View>
+
+      </View>
+      <View>
+        <Button title="Create Ride" onPress={() => navigation.navigate('Create Ride')}/>
+      </View>
+
       
     </ScrollView>
   );

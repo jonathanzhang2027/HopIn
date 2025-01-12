@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import AuthScreen from '@/screens/AuthScreen';
 import WelcomeScreen from '@/screens/Welcome';
 import SignUp from '@/screens/SignUp';
+import CreateRide from '@/screens/CreateRide';
 
 const Stack = createStackNavigator();
 
@@ -17,6 +18,7 @@ export default function Index() {
       <Stack.Screen name="Sign In" component={AuthScreen} />
       <Stack.Screen name="Sign Up" component={SignUp} />
       <Stack.Screen name="SearchFilter" component={SearchFilter} />
+      <Stack.Screen name="Create Ride" component={CreateRide} />
     </Stack.Navigator>
   );
 }

@@ -13,7 +13,10 @@ export default function AuthScreen({ navigation }: { navigation: any }) {
     setLoading(true);
     setError('');
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        if (userCredential && userCredential.user) {
+          navigation.navigate('SearchFilter');
+        }
     } catch (error: any) {
       setError(error.message);
     } finally {
