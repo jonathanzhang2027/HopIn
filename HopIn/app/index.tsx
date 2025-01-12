@@ -12,10 +12,10 @@ export default function Index() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {/* First Screen */}
-      {/* <Stack.Screen name="Welcome" component={WelcomeScreen} /> */}
+      <Stack.Screen name="Welcome" component={WelcomeScreen} />
       {/* Second Screen */}
-      {/* <Stack.Screen name="Sign In" component={AuthScreen} /> */}
-      {/* <Stack.Screen name="Sign Up" component={SignUp} /> */}
+      <Stack.Screen name="Sign In" component={AuthScreen} />
+      <Stack.Screen name="Sign Up" component={SignUp} />
       <Stack.Screen name="SearchFilter" component={SearchFilter} />
     </Stack.Navigator>
   );
