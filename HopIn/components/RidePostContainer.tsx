@@ -10,11 +10,26 @@ interface RidePostProps {
 
 export default function RidePostContainer(props: RidePostProps) {
     return(
-        <View >
-            <Text>From: {props.from}</Text>
-            <Text>Destination: {props.destination}</Text>
-            <Text>Date: {props.date.toLocaleDateString()}</Text>
-            <Text>Price: {props.price}</Text>
-        </View>
+        <TouchableOpacity style={styles.container}>
+            <View style={styles.stuff}>
+                <Text>From: {props.from}</Text>
+                <Text>Destination: {props.destination}</Text>
+                <Text>Date: {props.date.toLocaleDateString()}</Text>
+                <Text>Price: {props.price}</Text>
+            </View>
+            <Button title="request"></Button>
+        </TouchableOpacity>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+      flexDirection: 'row',
+    },
+    stuff:{
+        flex: 2,
+    },
+    secondStuff:{
+
+    }
+  });

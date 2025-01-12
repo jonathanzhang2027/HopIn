@@ -4,11 +4,11 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import RidePostContainer from './RidePostContainer';
 
 interface RidePosting {
-  id: string;
-  from: string;
-  destination: string;
-  date: Date;
-  price: number;
+    id: string;
+    from: string;
+    destination: string;
+    date: Date;
+    price: number;
 }
 
 export default function SearchFilter() {
@@ -32,6 +32,7 @@ export default function SearchFilter() {
     }
   };
 
+
   const handleSubmit = () => {
     console.log('From:', from);
     console.log('Destination:', destination);
@@ -52,51 +53,52 @@ export default function SearchFilter() {
       }
   };
 
-  const renderItem = ({ item }: { item: RidePosting }) => (
-    <View style={styles.posting}>
-      <RidePostContainer
-        from={item.from}
-        destination={item.destination}
-        date={item.date}
-        price={item.price}
-    />
-    </View>
+    const renderItem = ({ item }: { item: RidePosting }) => (
+        <View style={styles.posting}>
+        <RidePostContainer
+            from={item.from}
+            destination={item.destination}
+            date={item.date}
+            price={item.price}
+        />
+        </View>
     
   );
 
   return (
     <View>
-      <View style={styles.container}>
-        <TextInput
-          style={styles.input}
-          placeholder="From"
-          value={from}
-          onChangeText={setFrom}
-          placeholderTextColor="#aaa"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Destination"
-          value={destination}
-          onChangeText={setDestination}
-          placeholderTextColor="#aaa"
-        />
-        
-        <DateTimePicker
-          mode="date"
-          value={date}
-          onChange={handleChange}
-        />
+        <View style={styles.container}>
+            <TextInput
+            style={styles.input}
+            placeholder="From"
+            value={from}
+            onChangeText={setFrom}
+            placeholderTextColor="#aaa"
+            />
+            <TextInput
+            style={styles.input}
+            placeholder="Destination"
+            value={destination}
+            onChangeText={setDestination}
+            placeholderTextColor="#aaa"
+            />
+            
+            <DateTimePicker
+            mode="date"
+            value={date}
+            onChange={handleChange}
+            />
 
-        <Button title="Search" onPress={handleSubmit}/>
-      </View>
-      <View style={styles.container}>
-        <FlatList
-          data={afterFilter}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-        />
-      </View>
+            <Button title="Search" onPress={handleSubmit}/>
+        </View>
+        <View style={styles.container}>
+            <Text style={styles.title}> Postings</Text>
+            <FlatList
+            data={afterFilter}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            />
+        </View>
       
     </View>
   );
@@ -112,10 +114,18 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     padding: 10,
     marginVertical: 10,
+    borderRadius: 10
   },
   posting: {
     padding: 15,
     borderBottomWidth: 1,
     borderColor: '#ccc',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold'
+  },
+  button:{
+
   }
 });
