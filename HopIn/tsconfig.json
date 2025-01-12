@@ -2,11 +2,6 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
-    "jsx": "react", // Enables JSX in TypeScript
-    "esModuleInterop": true, // Ensures compatibility with CommonJS modules
-    "moduleResolution": "node",
-    "target": "es6",
-    "skipLibCheck": true,
     "paths": {
       "@/*": [
         "./*"
