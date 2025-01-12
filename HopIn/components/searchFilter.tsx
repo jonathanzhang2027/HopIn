@@ -2,29 +2,50 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, FlatList, TextInput, Button, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RidePostContainer from './RidePostContainer';
+import { db } from '../config/firebaseConfig';
+import { collection, onSnapshot, query } from 'firebase/firestore';
 
 interface RidePosting {
     id: string;
-    from: string;
+    name: string;
+    source: string;
     destination: string;
-    date: Date;
     price: number;
-}
-
+    date: Date;
+  }
+  
 export default function SearchFilter() {
-  //const [postings, setPostings] = useState<RidePosting[]>([]);
-  const [postings, setPostings] = useState<RidePosting[]>([
-    { id: '1', from: 'Santa Barbara', destination: 'Los Angeles', date: new Date('2025-01-15'), price: 100 },
-    { id: '2', from: 'San Francisco', destination: 'Santa Barbara', date: new Date('2025-01-20') , price: 100},
-    { id: '3', from: 'Los Angeles', destination: 'San Francisco', date: new Date('2025-02-10') , price: 100},
-    { id: '4', from: 'Santa Barbara', destination: 'Las Vegas', date: new Date('2025-01-30') , price: 100},
-    { id: '5', from: 'Los Angeles', destination: 'Santa Barbara', date: new Date('2025-01-18') , price: 100},
-  ]);
+    const [postings, setPostings] = useState<RidePosting[]>([]);
   const [afterFilter, setAfterFilter] = useState<RidePosting[]>([]);
   const [from, setFrom] = useState<string>('');
   const [destination, setDestination] = useState<string>('');
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
+
+  useEffect(() => {
+    const q = query(collection(db, 'ridePostings'));
+  
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const postingsData: RidePosting[] = querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          name: data.name || '',
+          source: data.source || '',
+          destination: data.destination || '',
+          price: data.price || 0,
+          date: data.date ? data.date.toDate() : new Date()
+        };
+      });
+  
+      setPostings(postingsData);
+      setAfterFilter(postingsData); // Show all postings initially
+    });
+  
+    // Cleanup function to unsubscribe from real-time updates when component unmounts
+    return () => unsubscribe();
+  }, []);
+
   const handleChange = (event: any, selectedDate?: Date) => {
     setShowPicker(false); // Close the picker after selection
     if (selectedDate) {
@@ -39,7 +60,7 @@ export default function SearchFilter() {
     //console.log('Date:', date.toLocaleDateString());
 
     const filtered = postings.filter((posting) => {
-        const isFromMatch = posting.from.toLowerCase()===(from.toLowerCase());
+        const isFromMatch = posting.source.toLowerCase()===(from.toLowerCase());
         const isDestinationMatch = posting.destination.toLowerCase()===(destination.toLowerCase());
         const isDateMatch = posting.date.toLocaleDateString() === date.toLocaleDateString(); // Compare only the date part
 
@@ -58,7 +79,7 @@ export default function SearchFilter() {
         return (
             <View style={styles.posting}>
                 <RidePostContainer
-                    from={item.from}
+                    from={item.source}
                     destination={item.destination}
                     date={item.date}
                     price={item.price}
