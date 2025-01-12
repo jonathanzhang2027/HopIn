@@ -1,16 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, FlatList, TextInput, Button, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import RidePostContainer from './RidePostContainer';
 
 interface RidePosting {
   id: string;
   from: string;
   destination: string;
   date: Date;
+  price: number;
 }
 
 export default function SearchFilter() {
-  const [postings, setPostings] = useState<RidePosting[]>([]);
+  //const [postings, setPostings] = useState<RidePosting[]>([]);
+  const [postings, setPostings] = useState<RidePosting[]>([
+    { id: '1', from: 'Santa Barbara', destination: 'Los Angeles', date: new Date('2025-01-15'), price: 100 },
+    { id: '2', from: 'San Francisco', destination: 'Santa Barbara', date: new Date('2025-01-20') , price: 100},
+    { id: '3', from: 'Los Angeles', destination: 'San Francisco', date: new Date('2025-02-10') , price: 100},
+    { id: '4', from: 'Santa Barbara', destination: 'Las Vegas', date: new Date('2025-01-30') , price: 100},
+    { id: '5', from: 'Los Angeles', destination: 'Santa Barbara', date: new Date('2025-01-18') , price: 100},
+  ]);
   const [afterFilter, setAfterFilter] = useState<RidePosting[]>([]);
   const [from, setFrom] = useState<string>('');
   const [destination, setDestination] = useState<string>('');
@@ -45,10 +54,14 @@ export default function SearchFilter() {
 
   const renderItem = ({ item }: { item: RidePosting }) => (
     <View style={styles.posting}>
-      <Text>From: {item.from}</Text>
-      <Text>Destination: {item.destination}</Text>
-      <Text>Date: {item.date.toLocaleDateString()}</Text>
+      <RidePostContainer
+        from={item.from}
+        destination={item.destination}
+        date={item.date}
+        price={item.price}
+    />
     </View>
+    
   );
 
   return (
@@ -59,12 +72,14 @@ export default function SearchFilter() {
           placeholder="From"
           value={from}
           onChangeText={setFrom}
+          placeholderTextColor="#aaa"
         />
         <TextInput
           style={styles.input}
           placeholder="Destination"
           value={destination}
           onChangeText={setDestination}
+          placeholderTextColor="#aaa"
         />
         
         <DateTimePicker
@@ -74,6 +89,13 @@ export default function SearchFilter() {
         />
 
         <Button title="Search" onPress={handleSubmit}/>
+      </View>
+      <View style={styles.container}>
+        <FlatList
+          data={afterFilter}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+        />
       </View>
       
     </View>
