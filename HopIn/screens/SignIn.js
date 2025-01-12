@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { ImageBackground } from "react-native";
+import SignUpScreen from '@/screens/SignUpScreen'
 
 const auth = getAuth();
 

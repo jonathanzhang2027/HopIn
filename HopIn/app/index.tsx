@@ -2,10 +2,9 @@ import React from 'react';
 import { ScrollView, View, StyleSheet } from 'react-native';
 import SearchFilter from '@/components/searchFilter';
 import { createStackNavigator } from '@react-navigation/stack';
-import AuthScreen from '@/components/AuthScreen';
-import HomeScreen from '@/components/HomeScreen';
+import AuthScreen from '@/screens/AuthScreen';
 import WelcomeScreen from '@/screens/Welcome';
-import SignUp from '@/components/SignUp';
+import SignUp from '@/screens/SignUp';
 
 const Stack = createStackNavigator();
 

@@ -8,7 +8,7 @@ import {
   ImageBackground,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import AuthScreen from "@/components/AuthScreen"
+import AuthScreen from "@/screens/AuthScreen"
 
 function WelcomeScreen({ navigation }) {
   return (
