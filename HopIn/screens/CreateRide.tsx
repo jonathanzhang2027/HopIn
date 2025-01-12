@@ -57,7 +57,7 @@ export default function CreateRide( { navigation } : { navigation: any } ) {
             driver_id: userId
           }
 
-        const collectionRef = collection(db, 'rides');
+        const collectionRef = collection(db, 'ridePostings');
         const docRef = await addDoc(collectionRef, docData);
         
         navigation.navigate('SearchFilter')

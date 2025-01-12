@@ -3,7 +3,7 @@ import { View, Text, ScrollView, FlatList, TextInput, Button, StyleSheet } from 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RidePostContainer from './RidePostContainer';
 import { auth, db } from '../config/firebaseConfig';
-import { collection, onSnapshot, query, doc, setDoc, addDoc } from 'firebase/firestore';
+import { collection, onSnapshot, query, doc, setDoc, addDoc , Timestamp} from 'firebase/firestore';
 import { onAuthStateChanged, User } from 'firebase/auth';
 
 interface RidePosting {
@@ -13,11 +13,11 @@ interface RidePosting {
       destination: string;
       price: number;
       date: Date;
+      uid: string;
     }
 
     export default function SearchFilter( { navigation }: { navigation: any }) {
         const [postings, setPostings] = useState<RidePosting[]>([]);
-      
         const [afterFilter, setAfterFilter] = useState<RidePosting[]>([]);
         const [from, setFrom] = useState<string>('');
         const [destination, setDestination] = useState<string>('');
@@ -30,13 +30,15 @@ interface RidePosting {
             const unsubscribe = onSnapshot(q, (querySnapshot) => {
               const postingsData: RidePosting[] = querySnapshot.docs.map(doc => {
                 const data = doc.data();
+                const user = auth.currentUser;
                 return {
                   id: doc.id,
                   name: data.name || '',
                   source: data.source || '',
                   destination: data.destination || '',
                   price: data.price || 0,
-                  date: data.date ? data.date.toDate() : new Date()
+                  date: data.date instanceof Timestamp ? data.date.toDate() : new Date(),
+                  uid: user ? user.uid : '',
                 };
               });
         
@@ -101,6 +103,7 @@ interface RidePosting {
                 destination={item.destination}
                 date={item.date}
                 price={item.price}
+                uid={item.uid}
             />
         </View>
     );
@@ -114,7 +117,6 @@ interface RidePosting {
     const collectionRef = collection(db, 'rides');
     const docRef = await addDoc(collectionRef, docData);
   }
-
 
   return (
     <ScrollView>
@@ -146,6 +148,7 @@ interface RidePosting {
         <View>
             <Button title="Create Ride" onPress={() => navigation.navigate('Create Ride')}/>
         </View>
+        
 
         <View style={styles.container}>
             <Text style={styles.title}> Postings</Text>
