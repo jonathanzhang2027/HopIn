@@ -1,16 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, FlatList, TextInput, Button, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import RidePostContainer from './RidePostContainer';
 
 interface RidePosting {
-  id: string;
-  from: string;
-  destination: string;
-  date: Date;
+    id: string;
+    from: string;
+    destination: string;
+    date: Date;
+    price: number;
 }
 
 export default function SearchFilter() {
-  const [postings, setPostings] = useState<RidePosting[]>([]);
+  //const [postings, setPostings] = useState<RidePosting[]>([]);
+  const [postings, setPostings] = useState<RidePosting[]>([
+    { id: '1', from: 'Santa Barbara', destination: 'Los Angeles', date: new Date('2025-01-15'), price: 100 },
+    { id: '2', from: 'San Francisco', destination: 'Santa Barbara', date: new Date('2025-01-20') , price: 100},
+    { id: '3', from: 'Los Angeles', destination: 'San Francisco', date: new Date('2025-02-10') , price: 100},
+    { id: '4', from: 'Santa Barbara', destination: 'Las Vegas', date: new Date('2025-01-30') , price: 100},
+    { id: '5', from: 'Los Angeles', destination: 'Santa Barbara', date: new Date('2025-01-18') , price: 100},
+  ]);
   const [afterFilter, setAfterFilter] = useState<RidePosting[]>([]);
   const [from, setFrom] = useState<string>('');
   const [destination, setDestination] = useState<string>('');
@@ -22,6 +31,7 @@ export default function SearchFilter() {
       setDate(selectedDate); // Update state with the new date
     }
   };
+
 
   const handleSubmit = () => {
     console.log('From:', from);
@@ -43,38 +53,52 @@ export default function SearchFilter() {
       }
   };
 
-  const renderItem = ({ item }: { item: RidePosting }) => (
-    <View style={styles.posting}>
-      <Text>From: {item.from}</Text>
-      <Text>Destination: {item.destination}</Text>
-      <Text>Date: {item.date.toLocaleDateString()}</Text>
-    </View>
+    const renderItem = ({ item }: { item: RidePosting }) => (
+        <View style={styles.posting}>
+        <RidePostContainer
+            from={item.from}
+            destination={item.destination}
+            date={item.date}
+            price={item.price}
+        />
+        </View>
+    
   );
 
   return (
     <View>
-      <View style={styles.container}>
-        <TextInput
-          style={styles.input}
-          placeholder="From"
-          value={from}
-          onChangeText={setFrom}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Destination"
-          value={destination}
-          onChangeText={setDestination}
-        />
-        
-        <DateTimePicker
-          mode="date"
-          value={date}
-          onChange={handleChange}
-        />
+        <View style={styles.container}>
+            <TextInput
+            style={styles.input}
+            placeholder="From"
+            value={from}
+            onChangeText={setFrom}
+            placeholderTextColor="#aaa"
+            />
+            <TextInput
+            style={styles.input}
+            placeholder="Destination"
+            value={destination}
+            onChangeText={setDestination}
+            placeholderTextColor="#aaa"
+            />
+            
+            <DateTimePicker
+            mode="date"
+            value={date}
+            onChange={handleChange}
+            />
 
-        <Button title="Search" onPress={handleSubmit}/>
-      </View>
+            <Button title="Search" onPress={handleSubmit}/>
+        </View>
+        <View style={styles.container}>
+            <Text style={styles.title}> Postings</Text>
+            <FlatList
+            data={afterFilter}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            />
+        </View>
       
     </View>
   );
@@ -90,10 +114,18 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     padding: 10,
     marginVertical: 10,
+    borderRadius: 10
   },
   posting: {
     padding: 15,
     borderBottomWidth: 1,
     borderColor: '#ccc',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold'
+  },
+  button:{
+
   }
 });
