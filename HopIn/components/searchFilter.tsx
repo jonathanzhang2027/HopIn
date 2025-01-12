@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, FlatList, TextInput, Button, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-
 import RidePostContainer from './RidePostContainer';
 import { auth, db } from '../config/firebaseConfig';
 import { collection, onSnapshot, query, doc, setDoc, addDoc } from 'firebase/firestore';
@@ -118,8 +117,6 @@ export default function SearchFilter( { navigation }: { navigation: any }) {
     const collectionRef = collection(db, 'rides');
     const docRef = await addDoc(collectionRef, docData);
   }
-
-
   return (
     <ScrollView>
         <View style={styles.container}>
@@ -148,6 +145,9 @@ export default function SearchFilter( { navigation }: { navigation: any }) {
 
         <Button title="Search" onPress={handleSubmit}/>
 
+        <View>
+            <Button title="Create Ride" onPress={() => navigation.navigate('Create Ride')}/>
+        </View>
 
         <View style={styles.container}>
             <Text style={styles.title}> Postings</Text>
@@ -158,12 +158,6 @@ export default function SearchFilter( { navigation }: { navigation: any }) {
             />
         </View>
 
-      </View>
-      <View>
-        <Button title="Create Ride" onPress={() => navigation.navigate('Create Ride')}/>
-      </View>
-
-      
     </ScrollView>
   );
 }
