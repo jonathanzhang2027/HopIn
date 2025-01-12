@@ -1,16 +1,37 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   Text,
   Pressable,
   Image,
   View,
   StyleSheet,
-  ImageBackground,
+  Animated,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import AuthScreen from "@/screens/AuthScreen"
 
 function WelcomeScreen({ navigation }) {
+  const logoScale = useRef(new Animated.Value(1)).current; // Scale animation
+  const logoOpacity = useRef(new Animated.Value(1)).current; // Opacity animation
+
+  const handleNavigateToSignUp = () => {
+    // Animate logo scale and opacity
+    Animated.parallel([
+      Animated.timing(logoScale, {
+        toValue: 5, // Increase the logo size infinitely
+        duration: 350,
+        useNativeDriver: true,
+      }),
+      Animated.timing(logoOpacity, {
+        toValue: 0, // Fade out the logo
+        duration: 250,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      // Navigate to the Sign-Up page after the animation
+      navigation.navigate("Sign Up");
+    });
+  };
+
   return (
     <LinearGradient
       colors={["#ffffff", "#f8f9fa", "#ebedef"]} // Subtle modern gradient
@@ -18,9 +39,12 @@ function WelcomeScreen({ navigation }) {
     >
       <View style={styles.contentContainer}>
         {/* Logo */}
-        <Image
+        <Animated.Image
           source={require("../assets/images/logo1.png")} // Replace with your logo path
-          style={styles.image}
+          style={[
+            styles.image,
+            { transform: [{ scale: logoScale }], opacity: logoOpacity },
+          ]}
         />
 
         {/* Tagline */}
@@ -40,7 +64,7 @@ function WelcomeScreen({ navigation }) {
             style={({ pressed }) =>
               pressed ? [styles.button, styles.buttonPressed] : styles.button
             }
-            onPress={() => navigation.navigate("Sign Up")}
+            onPress={handleNavigateToSignUp}
           >
             <Text style={styles.buttonText}>Sign Up</Text>
           </Pressable>
@@ -79,12 +103,11 @@ const styles = StyleSheet.create({
   },
   baseText: {
     color: "#4a4a4a",
-    fontSize: 16, // Bigger font for tagline
+    fontSize: 16,
     textAlign: "center",
-    fontFamily: "System", // Replace with custom font if needed
     fontWeight: "500",
     marginBottom: 30,
-    letterSpacing: 0.5, // Subtle spacing for modern look
+    letterSpacing: 0.5,
   },
   buttonContainer: {
     flexDirection: "row",
@@ -115,7 +138,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     fontSize: 18,
-    textTransform: "uppercase", // Modern all-uppercase button text
+    textTransform: "uppercase",
     letterSpacing: 1.2,
   },
 });
