@@ -11,6 +11,7 @@ interface RidePosting {
 
 export default function SearchFilter() {
   const [postings, setPostings] = useState<RidePosting[]>([]);
+  const [afterFilter, setAfterFilter] = useState<RidePosting[]>([]);
   const [from, setFrom] = useState<string>('');
   const [destination, setDestination] = useState<string>('');
   const [date, setDate] = useState(new Date());
@@ -26,6 +27,20 @@ export default function SearchFilter() {
     console.log('From:', from);
     console.log('Destination:', destination);
     console.log('Date:', date.toLocaleDateString());
+
+    const filtered = postings.filter((posting) => {
+        const isFromMatch = posting.from.toLowerCase()===(from.toLowerCase());
+        const isDestinationMatch = posting.destination.toLowerCase()===(destination.toLowerCase());
+        const isDateMatch = posting.date.toLocaleDateString() === date.toLocaleDateString(); // Compare only the date part
+
+        return isFromMatch && isDestinationMatch && isDateMatch;
+      });
+      if(!from && !destination){
+        setAfterFilter(postings);
+      }
+      else{
+        setAfterFilter(filtered);
+      }
   };
 
   const renderItem = ({ item }: { item: RidePosting }) => (
@@ -37,7 +52,7 @@ export default function SearchFilter() {
   );
 
   return (
-    <ScrollView>
+    <View>
       <View style={styles.container}>
         <TextInput
           style={styles.input}
@@ -61,7 +76,7 @@ export default function SearchFilter() {
         <Button title="Search" onPress={handleSubmit}/>
       </View>
       
-    </ScrollView>
+    </View>
   );
 }
 
