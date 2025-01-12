@@ -5,6 +5,7 @@ import {
   Image,
   View,
   StyleSheet,
+  ScrollView,
   ImageBackground,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";

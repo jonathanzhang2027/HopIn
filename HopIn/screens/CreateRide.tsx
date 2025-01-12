@@ -5,52 +5,47 @@ import {
     TextInput,
     Button,
     StyleSheet,
+    ScrollView,
     Alert,
     ActivityIndicator,
 } from 'react-native';
 import { auth, db } from '@/config/firebaseConfig';
-import { collection, addDoc, doc, setDoc, arrayUnion, updateDoc} from 'firebase/firestore';
+import { collection, addDoc, doc, setDoc } from 'firebase/firestore';
 import { onAuthStateChanged, User } from 'firebase/auth';
-import DateTimePicker from '@react-native-community/datetimepicker';
 
 
 
-export default function CreateRide( { navigation } : { navigation: any } ) {
+export default function CreateRide({ navigation }: { navigation: any }) {
     const [name, setName] = useState<string>('');
     const [source, setSource] = useState<string>('');
     const [destination, setDestination] = useState<string>('');
     const [price, setPrice] = useState<string>('');
     const [seats, setSeats] = useState<string>('');
-    const [time, setTime] = useState<string>('');
+    const [date, setDate] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
-
-    
-    const [date, setDate] = useState(new Date());
-    const [showPicker, setShowPicker] = useState(false);
 
 
     const [user, setUser] = useState<User | null>(null);
     const [userId, setUserId] = useState<string | null>(null);
-  
-        useEffect(() => {
-            const unsubscribe = onAuthStateChanged(auth, (user) => {
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
                 setUser(user);
                 setUserId(user.uid);
             } else {
+
                 setUser(null);
                 setUserId(null);
-                }
-            });
-            return () => unsubscribe();
-        }, []);
+            }
+        });
+        return () => unsubscribe();
+    }, []);
 
 
     const handleCreateRide = async () => {
-        if (!user)
-            return
 
-        if (!source || !destination || !price || !seats || !time || !date) {
+        if (!source || !destination || !price || !seats || !date) {
             Alert.alert('Error', 'All fields are required.');
             return;
         }
@@ -61,124 +56,104 @@ export default function CreateRide( { navigation } : { navigation: any } ) {
             price,
             seats,
             date,
-            time,
             driver_id: userId
-          }
+        }
 
-        const ridesRef = collection(db, 'rides');
-        const docRef = await addDoc(ridesRef, docData);
-
-        const userRef = doc(db, 'users', user.uid);
-        await updateDoc(userRef, {
-            my_postings: arrayUnion(docRef.id)
-        })
+        const collectionRef = collection(db, 'ridePostings');
+        const docRef = await addDoc(collectionRef, docData);
 
         navigation.navigate('SearchFilter')
     };
 
 
-    const handleDate = (event: any, selectedDate?: Date) => {
-        setShowPicker(false); // Close the picker after selection
-        if (selectedDate) {
-          setDate(selectedDate); // Update state with the new date
-        }
-      };
-
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Create Posting</Text>
+        <ScrollView>
+            <View style={styles.container}>
+                <Text style={styles.title}>Create Posting</Text>
 
 
-            {/* Source */}
-            <View style={styles.inputContainer}>
-                <Text style={styles.label}>Source:</Text>
-                <TextInput
-                    style={[styles.input, { fontStyle: source ? 'normal' : 'italic' }]}
-                    placeholder="Starting Point"
-                    placeholderTextColor="#888"
-                    value={source}
-                    onChangeText={setSource}
+                {/* Source */}
+                <View style={styles.inputContainer}>
+                    <Text style={styles.label}>Source:</Text>
+                    <TextInput
+                        style={[styles.input, { fontStyle: source ? 'normal' : 'italic' }]}
+                        placeholder="Starting Point"
+                        placeholderTextColor="#888"
+                        value={source}
+                        onChangeText={setSource}
+                    />
+                </View>
+
+
+                {/* Destination */}
+                <View style={styles.inputContainer}>
+                    <Text style={styles.label}>Destination:</Text>
+                    <TextInput
+                        style={[styles.input, { fontStyle: destination ? 'normal' : 'italic' }]}
+                        placeholder="Destination"
+                        placeholderTextColor="#888"
+                        value={destination}
+                        onChangeText={setDestination}
+                    />
+                </View>
+
+
+                {/* Price */}
+                <View style={styles.inputContainer}>
+                    <Text style={styles.label}>Price:</Text>
+                    <TextInput
+                        style={[styles.input, { fontStyle: price ? 'normal' : 'italic' }]}
+                        placeholder="$10"
+                        placeholderTextColor="#888"
+                        value={price}
+                        onChangeText={setPrice}
+                        keyboardType="numeric"
+                    />
+                </View>
+
+
+                {/* Available Seats */}
+                <View style={styles.inputContainer}>
+                    <Text style={styles.label}>Seats:</Text>
+                    <TextInput
+                        style={[styles.input, { fontStyle: seats ? 'normal' : 'italic' }]}
+                        placeholder="2"
+                        placeholderTextColor="#888"
+                        value={seats}
+                        onChangeText={setSeats}
+                        keyboardType="numeric"
+                    />
+                </View>
+
+
+                {/* Date */}
+                <View style={styles.inputContainer}>
+                    <Text style={styles.label}>Date:</Text>
+                    <TextInput
+                        style={[styles.input, { fontStyle: date ? 'normal' : 'italic' }]}
+                        placeholder="YYYY-MM-DD"
+                        placeholderTextColor="#888"
+                        value={date}
+                        onChangeText={setDate}
+                    />
+                </View>
+
+
+                {/* Create Posting Button */}
+                {loading ? (
+                    <ActivityIndicator size="large" color="#0000ff" />
+                ) : (
+                    <Button title="Create Posting" onPress={handleCreateRide} />
+                )}
+
+
+                {/* Back to Home Button */}
+                <Button
+                    title="Back to Home"
+                    onPress={() => navigation.navigate('Welcome')}
                 />
             </View>
-
-
-            {/* Destination */}
-            <View style={styles.inputContainer}>
-                <Text style={styles.label}>Destination:</Text>
-                <TextInput
-                    style={[styles.input, { fontStyle: destination ? 'normal' : 'italic' }]}
-                    placeholder="Destination"
-                    placeholderTextColor="#888"
-                    value={destination}
-                    onChangeText={setDestination}
-                />
-            </View>
-
-
-            {/* Price */}
-            <View style={styles.inputContainer}>
-                <Text style={styles.label}>Price:</Text>
-                <TextInput
-                    style={[styles.input, { fontStyle: price ? 'normal' : 'italic' }]}
-                    placeholder="$10"
-                    placeholderTextColor="#888"
-                    value={price}
-                    onChangeText={setPrice}
-                    keyboardType="numeric"
-                />
-            </View>
-
-
-            {/* Available Seats */}
-            <View style={styles.inputContainer}>
-                <Text style={styles.label}>Seats:</Text>
-                <TextInput
-                    style={[styles.input, { fontStyle: seats ? 'normal' : 'italic' }]}
-                    placeholder="2"
-                    placeholderTextColor="#888"
-                    value={seats}
-                    onChangeText={setSeats}
-                    keyboardType="numeric"
-                />
-            </View>
-
-            <View style={styles.inputContainer}>
-                <Text style={styles.label}>Time:</Text>
-                <TextInput
-                    style={[styles.input, { fontStyle: time ? 'normal' : 'italic' }]}
-                    placeholder="9:00 AM"
-                    placeholderTextColor="#888"
-                    value={time}
-                    onChangeText={setTime}
-                />
-            </View>
-
-
-
-            <View style={styles.inputContainer}>
-            <Text style={styles.label}>Date:</Text>
-            <DateTimePicker
-            mode="date"
-            value={date}
-            onChange={handleDate}
-            />
-            </View>
-
-
-            {/* Create Posting Button */}
-            {loading ? (
-                <ActivityIndicator size="large" color="#0000ff" />
-            ) : (
-                <Button title="Create Posting" onPress={handleCreateRide} />
-            )}
-
-
-            {/* Back to Home Button */}
-            <Button
-                title="Back to Home"
-                onPress={() => navigation.navigate('Welcome')}
-            />
-        </View>
+        </ScrollView>
     );
 };
 

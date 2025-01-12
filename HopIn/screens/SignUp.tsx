@@ -11,6 +11,7 @@ import {
 import { auth, db } from '@/config/firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
+import { ScrollView } from 'react-native';
 
 interface SignUpProps {
   navigation: {
@@ -73,9 +74,9 @@ const SignUp: React.FC<SignUpProps> = ({ navigation }) => {
   };
 
   return (
+    <ScrollView>
     <View style={styles.container}>
       <Text style={styles.title}>Sign Up</Text>
-
       {/* Name */}
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Name:</Text>
@@ -154,6 +155,7 @@ const SignUp: React.FC<SignUpProps> = ({ navigation }) => {
         onPress={() => navigation.navigate('Sign In')}
       />
     </View>
+    </ScrollView>
   );
 };
 

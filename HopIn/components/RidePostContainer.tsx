@@ -6,6 +6,8 @@ interface RidePostProps {
     destination: string;
     date: Date;
     price: number;
+    uid: string;
+    driver_id: string;
   }
 
 export default function RidePostContainer(props: RidePostProps) {
