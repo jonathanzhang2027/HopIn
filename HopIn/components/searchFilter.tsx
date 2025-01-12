@@ -34,9 +34,9 @@ export default function SearchFilter() {
 
 
   const handleSubmit = () => {
-    console.log('From:', from);
-    console.log('Destination:', destination);
-    console.log('Date:', date.toLocaleDateString());
+    //console.log('From:', from);
+    //console.log('Destination:', destination);
+    //console.log('Date:', date.toLocaleDateString());
 
     const filtered = postings.filter((posting) => {
         const isFromMatch = posting.from.toLowerCase()===(from.toLowerCase());
@@ -53,20 +53,22 @@ export default function SearchFilter() {
       }
   };
 
-    const renderItem = ({ item }: { item: RidePosting }) => (
-        <View style={styles.posting}>
-        <RidePostContainer
-            from={item.from}
-            destination={item.destination}
-            date={item.date}
-            price={item.price}
-        />
-        </View>
-    
-  );
+    const renderItem = ({ item }: { item: RidePosting }) => {
+        //console.log('Rendering item:', item);
+        return (
+            <View style={styles.posting}>
+                <RidePostContainer
+                    from={item.from}
+                    destination={item.destination}
+                    date={item.date}
+                    price={item.price}
+                />
+            </View>
+        );
+    }
 
   return (
-    <View>
+    <ScrollView>
         <View style={styles.container}>
             <TextInput
             style={styles.input}
@@ -89,8 +91,10 @@ export default function SearchFilter() {
             onChange={handleChange}
             />
 
-            <Button title="Search" onPress={handleSubmit}/>
         </View>
+
+        <Button title="Search" onPress={handleSubmit}/>
+
         <View style={styles.container}>
             <Text style={styles.title}> Postings</Text>
             <FlatList
@@ -100,7 +104,7 @@ export default function SearchFilter() {
             />
         </View>
       
-    </View>
+    </ScrollView>
   );
 }
 
@@ -124,8 +128,5 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold'
-  },
-  button:{
-
   }
 });
