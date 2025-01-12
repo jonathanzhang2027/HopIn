@@ -48,10 +48,12 @@ const SignUp: React.FC<SignUpProps> = ({ navigation }) => {
       const userDocRef = doc(db, 'users', userId);
       await setDoc(userDocRef, {
         name,
-        email,
         phone,
         instagram,
-        createdAt: new Date().toISOString(),
+        my_postings: [],
+        my_pending_rides: [],
+        my_confirmed_rides: [],
+        to_confirm: []
       });
 
       Alert.alert('Success', 'Account created successfully!');
@@ -66,6 +68,7 @@ const SignUp: React.FC<SignUpProps> = ({ navigation }) => {
       Alert.alert('Error', error.message);
     } finally {
       setLoading(false);
+      navigation.navigate('SearchFilter')
     }
   };
 
