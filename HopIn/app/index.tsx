@@ -1,11 +1,23 @@
 import React from 'react';
 import { ScrollView, View, StyleSheet } from 'react-native';
 import SearchFilter from '@/components/searchFilter';
+import { createStackNavigator } from '@react-navigation/stack';
+import AuthScreen from '@/components/AuthScreen';
+import HomeScreen from '@/components/HomeScreen';
+import WelcomeScreen from '@/screens/Welcome';
+import SignUp from '@/components/SignUp';
+
+const Stack = createStackNavigator();
 
 export default function Index() {
   return (
-    <ScrollView>
-      <SearchFilter/>
-    </ScrollView>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      {/* First Screen */}
+      <Stack.Screen name="Welcome" component={WelcomeScreen} />
+      {/* Second Screen */}
+      <Stack.Screen name="Sign In" component={AuthScreen} />
+      <Stack.Screen name="Sign Up" component={SignUp} />
+      <Stack.Screen name="SearchFilter" component={SearchFilter} />
+    </Stack.Navigator>
   );
 }
