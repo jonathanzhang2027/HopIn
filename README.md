@@ -1,6 +1,6 @@
 # HopIn
 
-Inspiration
+**Inspiration**
 The idea for HopIn was inspired by the challenges college students face when trying to find affordable and reliable transportation options. With rising costs and limited resources, we wanted to create a platform that connects students heading to similar destinations, fostering a sense of community while providing a cost-effective and safe ridesharing experience.
 
 What it does
