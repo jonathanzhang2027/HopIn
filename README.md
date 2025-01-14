@@ -1,18 +1,33 @@
 # HopIn
 
-**Inspiration**
-The idea for HopIn was inspired by the challenges college students face when trying to find affordable and reliable transportation options. With rising costs and limited resources, we wanted to create a platform that connects students heading to similar destinations, fostering a sense of community while providing a cost-effective and safe ridesharing experience.
+[![Link to Devpost](https://img.shields.io/badge/Devpost-Link-blue)](https://devpost.com/software/hopin-6al0en?ref_content=my-projects-tab&ref_feature=my_projects)
 
-What it does
-HopIn is a rideshare app designed for college students that:
+## Inspiration
 
-Allows drivers to post rides with details like source, destination, price, and available seats. Enables riders to search for and request rides that fit their schedule and budget. Provides a request and confirmation system for drivers and riders to manage ride participation. Features user authentication to ensure a secure and reliable platform.
+HopIn was born from the need to address the transportation challenges faced by college students. Recognizing the rising costs and limited resources, we aimed to create a platform that connects students traveling to similar destinations. Our goal was to foster a sense of community while offering a cost-effective and safe ridesharing experience.
 
-How we built it
-We developed HopIn using:
+## What it Does
 
-Frontend: React Native for building a cross-platform mobile application. 
-Backend: Firebase for real-time database management, user authentication, and secure storage. 
-Expo: For simultaneous mobile and web development, enabling efficient testing and deployment. 
-Firestore Structure: Users: Store user information, including postings and ride participation. 
-Rides: Store ride details, including driver and rider information, pricing, and availability.
+HopIn is a ridesharing app specifically designed for college students. It provides the following features:
+
+*   **Ride Posting:** Allows drivers to post rides with essential details such as source, destination, price, and available seats.
+*   **Ride Searching:** Enables riders to search for and request rides that align with their schedule and budget.
+*   **Request & Confirmation System:** Provides a seamless request and confirmation system for drivers and riders to manage ride participation effectively.
+*   **User Authentication:** Incorporates secure user authentication to ensure a reliable and safe platform.
+
+## How We Built It
+
+The HopIn app was built using the following technologies:
+
+*   **Frontend:** React Native, for building a cross-platform mobile application compatible with both iOS and Android.
+*   **Backend:** Firebase, for real-time database management, user authentication, and secure storage solutions.
+*   **Development Tooling:** Expo, facilitating simultaneous mobile and web development, enabling efficient testing and deployment processes.
+*   **Firestore Structure:**
+    *   `Users`: Stores user information, including posted rides and ride participation data.
+    *   `Rides`: Stores comprehensive ride details, including driver and rider information, pricing, and availability.
+
+## Learn More
+
+For additional information about HopIn, please visit the Devpost link:
+
+[https://devpost.com/software/hopin-6al0en?ref_content=my-projects-tab&ref_feature=my_projects](https://devpost.com/software/hopin-6al0en?ref_content=my-projects-tab&ref_feature=my_projects)
